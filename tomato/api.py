@@ -12,7 +12,7 @@ def cmd_remote(cmd, username, password, ip, port=22):
     :param int port: ssh port
     :return tuple of flag('success','failure'), message
     """
-    cmd_origin.cmd_remote(cmd, username, password, ip, port)
+    return cmd_origin.cmd_remote(cmd, username, password, ip, port)
 
 
 def cmd_remote_args(cmd, username, password, ip, args, finish_match=None, port=22):
@@ -27,7 +27,7 @@ def cmd_remote_args(cmd, username, password, ip, args, finish_match=None, port=2
     :param int port: ssh port
     :return tuple of flag('success','failure'), message
     """
-    cmd_origin.cmd_remote_args(cmd, username, password, ip, args, finish_match, port)
+    return cmd_origin.cmd_remote_args(cmd, username, password, ip, args, finish_match, port)
 
 
 def cmds_remote(cmds, username, password, ip, port=22):
@@ -40,7 +40,7 @@ def cmds_remote(cmds, username, password, ip, port=22):
     :param int port: ssh port
     :return list of tuple of flag('success','failure'), message
     """
-    cmd_origin.cmds_remote(cmds, username, password, ip, port)
+    return cmd_origin.cmds_remote(cmds, username, password, ip, port)
 
 
 def put_remote(username, password, ip, local_file, remote_file, port=22):
@@ -54,7 +54,7 @@ def put_remote(username, password, ip, local_file, remote_file, port=22):
     :param int port: ssh port
     :return tuple of flag('success','failure'), message
     """
-    cmd_origin.put_remote(username, password, ip, local_file, remote_file, port)
+    return cmd_origin.put_remote(username, password, ip, local_file, remote_file, port)
 
 
 def cmd_remotes(cmd, remotes):
@@ -64,7 +64,7 @@ def cmd_remotes(cmd, remotes):
     :param list remotes: list for remote object
     :return list of tuple of flag
     """
-    cmd_ext.cmd_remotes(cmd, remotes)
+    return cmd_ext.cmd_remotes(cmd, remotes)
 
 
 def cmd_remotes_args(cmd, remotes, args, finish_match=None):
@@ -76,7 +76,7 @@ def cmd_remotes_args(cmd, remotes, args, finish_match=None):
     :param str finish_match: key word flag that cmd finish
     :return list of tuple of flag
     """
-    cmd_ext.cmd_remotes_args(cmd, remotes, args, finish_match)
+    return cmd_ext.cmd_remotes_args(cmd, remotes, args, finish_match)
 
 
 def cmds_remotes(cmds, remotes):
@@ -86,7 +86,7 @@ def cmds_remotes(cmds, remotes):
     :param list remotes: list for remote object
     :return list of list of tuple of flag
     """
-    cmd_ext.cmds_remotes(cmds, remotes)
+    return cmd_ext.cmds_remotes(cmds, remotes)
 
 
 def put_remotes(remotes, local_file, remote_file):
