@@ -1,3 +1,5 @@
+import time
+
 from tomato import cmd_ext
 from tomato import cmd_origin
 
@@ -197,3 +199,18 @@ def cmds_remote_parallel2(remote_to_cmds, executor):
     :param executor executor: execute pool
     """
     cmd_ext.cmds_remote_parallel2(remote_to_cmds, executor)
+
+
+def check_finish(check_func, not_finish):
+    """
+    阻塞检查命令是否完成
+    :param func check_func: check func which accept element of not_finish
+    :param list not_finish: list of element
+    :return:
+    """
+    while len(not_finish) > 0:
+        for index in range(len(not_finish) - 1, -1, -1):
+            if check_func(not_finish[index]):
+                del not_finish[index]
+        print('检测尚未执行完毕节点：', list(str(x) for x in not_finish))
+        time.sleep(2)
