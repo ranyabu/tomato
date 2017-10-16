@@ -2,6 +2,45 @@ from tomato import cmd_ext
 from tomato import cmd_origin
 
 
+class Remote(object):
+    """
+    远程用户
+    """
+
+    def __init__(self, username, password, ip, port=22):
+        self.__username = username
+        self.__password = password
+        self.__ip = ip
+        self.__port = port
+
+    @property
+    def username(self):
+        return self.__username
+
+    @username.setter
+    def username(self, value):
+        self.__username = value
+
+    @property
+    def password(self):
+        return self.__password
+
+    @password.setter
+    def password(self, value):
+        self.__password = value
+
+    @property
+    def ip(self):
+        return self.__ip
+
+    @property
+    def port(self):
+        return self.__port
+
+    def __str__(self, *args, **kwargs):
+        return 'Remote (ip=%s, port=%s, username=%s)' % (self.ip, self.port, self.username)
+
+
 def cmd_remote(cmd, username, password, ip, port=22):
     """
     执行远程命令
@@ -23,7 +62,7 @@ def cmd_remote_args(cmd, username, password, ip, args, finish_match=None, port=2
     :param str password: ssh password
     :param str ip: ssh host
     :param list args: cmd args
-    :param str finish_match: key word flag that cmd finish
+    :param str or None finish_match: key word flag that cmd finish
     :param int port: ssh port
     :return tuple of flag('success','failure'), message
     """
@@ -73,7 +112,7 @@ def cmd_remotes_args(cmd, remotes, args, finish_match=None):
     :param str cmd: linux cmd
     :param list remotes: remote object
     :param list args: cmd args
-    :param str finish_match: key word flag that cmd finish
+    :param str or None finish_match: key word flag that cmd finish
     :return list of tuple of flag
     """
     return cmd_ext.cmd_remotes_args(cmd, remotes, args, finish_match)
@@ -105,7 +144,7 @@ def cmd_remote_args_parallel1(remotes, cmd, args, finish_match, executor):
     :param list remotes: list for remote object
     :param str cmd: linux cmd
     :param list args: cmd args
-    :param str finish_match: key word flag that cmd finish
+    :param str or None finish_match: key word flag that cmd finish
     :param executor executor: execute pool
     """
     cmd_ext.cmd_remote_args_parallel1(remotes, cmd, args, finish_match, executor)
@@ -115,7 +154,7 @@ def cmd_remote_args_parallel2(remote_cmd_and_args, finish_match, executor):
     """
     交互式执行命令 parallel模式
     :param map remote_cmd_and_args: k:remote - v:list of cmd and args
-    :param str finish_match: key word flag that cmd finish
+    :param str or None finish_match: key word flag that cmd finish
     :param executor executor: execute pool
     """
     cmd_ext.cmd_remote_args_parallel2(remote_cmd_and_args, finish_match, executor)

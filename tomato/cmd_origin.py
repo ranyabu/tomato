@@ -42,7 +42,7 @@ def cmd_remote(cmd, username, password, ip, port=22):
             _, stdout, stderr = ssh.exec_command(cmd)
             result = stdout.read()
             print('** TOMATO%s! %s success exec:%s' % (task_id, ip + ':' + str(port), cmd))
-            return 'success', result
+            return 'success', str(result, encoding="utf-8")
         except (BadHostKeyException, AuthenticationException, SSHException, socket.error, Exception) as e:
             print('** TOMATO%s! %s failure exec:%s' % (task_id, ip + ':' + str(port), cmd))
             return 'failure', str(e)
@@ -56,7 +56,7 @@ def cmd_remote_args(cmd, username, password, ip, args, finish_match=None, port=2
     :param str password: ssh password
     :param str ip: ssh host
     :param list args: cmd args
-    :param str finish_match: key word flag that cmd finish
+    :param str or None finish_match: key word flag that cmd finish
     :param int port: ssh port
     :return tuple of flag('success','failure'), message
     """
@@ -116,7 +116,7 @@ def cmds_remote(cmds, username, password, ip, port=22):
             for cmd in cmds:
                 print('** TOMATO%s! %s ready   exec:%s' % (task_id, ip + ":" + str(port), cmd))
                 stdin, stdout, stderr = ssh.exec_command(cmd)
-                out.append(stdout.read())
+                out.append(str(stdout.read(), encoding="utf-8"))
                 print('** TOMATO%s! %s success exec:%s' % (task_id, ip + ':' + str(port), cmd))
             return 'success', out
         except (BadHostKeyException, AuthenticationException, SSHException, socket.error, Exception) as e:
