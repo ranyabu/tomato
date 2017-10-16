@@ -22,6 +22,5 @@ result2 = api.cmd_remotes('ls -a /',[api.Remote('root', 'root', '192.168.0.2'), 
 from concurrent import futures
 from tomato import api
 with futures.ThreadPoolExecutor(max_workers=10) as executor:
-    api.cmd_remote_args_parallel1(
-        [api.Remote('root', 'root', '192.168.0.2'), api.Remote('root', 'root', '192.168.0.3')],'sudo passwd', ['XY2ghlmcl', 'XY2ghlmcl'], None, executor)
+    api.cmd_remote_args_parallel1([api.Remote('root', 'root', '192.168.0.2'), api.Remote('root', 'root', '192.168.0.3')],'sudo passwd', ['XY2ghlmcl', 'XY2ghlmcl'], None, executor)
 ```
