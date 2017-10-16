@@ -1,14 +1,5 @@
-import logging
-
 from tomato import cmd_ext
 from tomato import cmd_origin
-
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-                    datefmt='%m-%d %H:%M',
-                    filemode='w')
-console = logging.StreamHandler()
-console.setLevel(logging.INFO)
 
 
 def cmd_remote(cmd, username, password, ip, port=22):

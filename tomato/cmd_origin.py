@@ -4,7 +4,6 @@
     cmd_origin 是基于paramiko执行远程命令的基础类；
         提供基本执行远程命令，执行远程带交互式命令，复制本地文件到远程
 """
-import logging
 import socket
 import time
 
@@ -39,13 +38,13 @@ def cmd_remote(cmd, username, password, ip, port=22):
         try:
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(ip, port, username, password, timeout=SSH_TIMEOUT)
-            logging.getLogger("tomato").info('** TOMATO%s! %s ready   exec:%s', task_id, ip + ':' + str(port), cmd)
+            print('** TOMATO%s! %s ready   exec:%s' % (task_id, ip + ':' + str(port), cmd))
             _, stdout, stderr = ssh.exec_command(cmd)
             result = stdout.read()
-            logging.getLogger("tomato").info('** TOMATO%s! %s success exec:%s', task_id, ip + ':' + str(port), cmd)
+            print('** TOMATO%s! %s success exec:%s' % (task_id, ip + ':' + str(port), cmd))
             return 'success', result
         except (BadHostKeyException, AuthenticationException, SSHException, socket.error, Exception) as e:
-            logging.getLogger("tomato").info('** TOMATO%s! %s failure exec:%s', task_id, ip + ':' + str(port), cmd)
+            print('** TOMATO%s! %s failure exec:%s' % (task_id, ip + ':' + str(port), cmd))
             return 'failure', str(e)
 
 
@@ -67,7 +66,7 @@ def cmd_remote_args(cmd, username, password, ip, args, finish_match=None, port=2
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(ip, port, username, password, timeout=SSH_TIMEOUT)
             with ssh.invoke_shell() as chan:
-                logging.getLogger("tomato").info('** TOMATO%s! %s ready   exec:%s', task_id, ip + ":" + str(port), cmd)
+                print('** TOMATO%s! %s ready   exec:%s' % (task_id, ip + ":" + str(port), cmd))
                 chan.send(cmd + '\n')
                 time.sleep(WAIT_TIME)
                 s = str(chan.recv(65536), encoding='utf8')
@@ -84,17 +83,17 @@ def cmd_remote_args(cmd, username, password, ip, args, finish_match=None, port=2
                             while True:
                                 if finish_match in out:
                                     time.sleep(WAIT_TIME)
-                                    logging.getLogger("tomato").info('** TOMATO%s! %s success exec:%s', task_id,
-                                                                     ip + ':' + str(port), cmd)
+                                    print('** TOMATO%s! %s success exec:%s' % (task_id,
+                                                                               ip + ':' + str(port), cmd))
                                     return 'success', out
                                 time.sleep(WAIT_TIME)
                                 out = str(chan.recv(65536), encoding='utf8')
                         else:
-                            logging.getLogger("tomato").info('** TOMATO%s! %s success exec:%s', task_id,
-                                                             ip + ':' + str(port), cmd)
+                            print('** TOMATO%s! %s success exec:%s' % (task_id,
+                                                                       ip + ':' + str(port), cmd))
                             return 'success', out
         except (BadHostKeyException, AuthenticationException, SSHException, socket.error, Exception) as e:
-            logging.getLogger("tomato").info('** TOMATO%s! %s failure exec:%s', task_id, ip + ':' + str(port), cmd)
+            print('** TOMATO%s! %s failure exec:%s' % (task_id, ip + ':' + str(port), cmd))
             return 'failure', str(e)
 
 
@@ -115,14 +114,14 @@ def cmds_remote(cmds, username, password, ip, port=22):
             ssh.connect(ip, port, username, password, timeout=SSH_TIMEOUT)
             out = []
             for cmd in cmds:
-                logging.getLogger("tomato").info('** TOMATO%s! %s ready   exec:%s', task_id, ip + ":" + str(port), cmd)
+                print('** TOMATO%s! %s ready   exec:%s' % (task_id, ip + ":" + str(port), cmd))
                 stdin, stdout, stderr = ssh.exec_command(cmd)
                 out.append(stdout.read())
-                logging.getLogger("tomato").info('** TOMATO%s! %s success exec:%s', task_id, ip + ':' + str(port), cmd)
+                print('** TOMATO%s! %s success exec:%s' % (task_id, ip + ':' + str(port), cmd))
             return 'success', out
         except (BadHostKeyException, AuthenticationException, SSHException, socket.error, Exception) as e:
-            logging.getLogger("tomato").info('** TOMATO%s! %s failure exec:%s', task_id, ip + ':' + str(port),
-                                             ''.join(cmds))
+            print('** TOMATO%s! %s failure exec:%s' % (task_id, ip + ':' + str(port),
+                                                       ''.join(cmds)))
             return 'failure', str(e)
 
 
@@ -144,16 +143,16 @@ def put_remote(username, password, ip, local_file, remote_file, port=22):
         ssh.connect(ip, port, username, password, timeout=SSH_TIMEOUT)
         paramiko.SFTPClient.from_transport(ssh.get_transport())
         sftp = ssh.open_sftp()
-        logging.getLogger("tomato").info('** TOMATO%s! %s', task_id, '开始复制数据,请勿打断程序.')
-        logging.getLogger("tomato").info('** TOMATO%s! %s', task_id,
-                                         '复制数据信息:{0}到{1}:{2}{3}'.format(local_file, ip, port, remote_file))
+        print('** TOMATO%s! %s' % (task_id, '开始复制数据,请勿打断程序.'))
+        print('** TOMATO%s! %s' % (task_id,
+                                   '复制数据信息:{0}到{1}:{2}{3}'.format(local_file, ip, port, remote_file)))
         start_t = time.time()
         sftp.put(local_file, remote_file)
         temp = '复制数据完成:{0}到{1}:{2}{3},耗时{4}!'.format(local_file, ip, port, remote_file,
                                                      round(time.time() - start_t, 2))
-        logging.getLogger("tomato").info('** TOMATO%s! %s', task_id, temp)
+        print('** TOMATO%s! %s' % (task_id, temp))
         return 'success', ''
     except (BadHostKeyException, AuthenticationException, SSHException, socket.error, Exception) as e:
-        logging.getLogger("tomato").info('** TOMATO%s! %s failure exec:%s', task_id, ip + ':' + str(port),
-                                         local_file + "->" + remote_file)
+        print('** TOMATO%s! %s failure exec:%s' % (task_id, ip + ':' + str(port),
+                                                   local_file + "->" + remote_file))
         return 'failure', str(e)
