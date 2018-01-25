@@ -10,7 +10,6 @@ from concurrent import futures
 from tomato.cmd_origin import *
 
 
-
 def cmd_remotes(cmd, remotes):
     """
     执行远程命令

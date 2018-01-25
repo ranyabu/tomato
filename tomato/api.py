@@ -176,7 +176,7 @@ def put_remote_parallel1(remotes, local_file, remote_file, executor):
 def put_remote_parallel2(remote_to_local_and_remote_file, executor):
     """
     执行远程复制 parallel模式
-    :param map remote_to_local_and_remote_file: remote object: k:rmeote - v:[local_file,remote_file]
+    :param map remote_to_local_and_remote_file: remote object: k:remote - v:[local_file,remote_file]
     :param executor executor: execute pool
     """
     cmd_ext.put_remote_parallel2(remote_to_local_and_remote_file, executor)

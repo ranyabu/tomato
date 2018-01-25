@@ -36,7 +36,7 @@ with futures.ThreadPoolExecutor(max_workers=10) as executor:
     api.put_remotes(remotes,'/tmp/a.txt','/tmp/a.txt')
     
     def check_f(remote):
-        _, out = api.cmd_remote('ls -a /tmp', remote.username,remote.password,remote.ip, remote.port)
+        _, out = api.cmd_remote('ls -a /tmp', remote.username, remote.password, remote.ip, remote.port)
         if 'a.txt' in out:
             return True
         return False
